@@ -17,13 +17,13 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
   
   const isList = viewMode === 'list';
 
-  const handleCopy = () => {
+  const handleCopy = (): void => {
     onCopy(prompt.content);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
   };
 
-  const getComplexityColor = (level: string) => {
+  const getComplexityColor = (level: Prompt['complexity']): string => {
     switch (level) {
       case 'Iniciante': return 'bg-green-100 text-green-800';
       case 'Intermediário': return 'bg-blue-100 text-blue-800';

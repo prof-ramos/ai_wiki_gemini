@@ -19,12 +19,12 @@ function App() {
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
 
   // Toast Handler
-  const addToast = (message: string, type: 'success' | 'error' | 'info' = 'success') => {
+  const addToast = (message: string, type: ToastType = 'success'): void => {
     const id = Date.now();
     setToasts((prev) => [...prev, { id, message, type }]);
   };
 
-  const removeToast = (id: number) => {
+  const removeToast = (id: number): void => {
     setToasts((prev) => prev.filter((t) => t.id !== id));
   };
 
@@ -45,12 +45,12 @@ function App() {
   const categories = Object.values(Category);
 
   // Handlers
-  const handleCopy = (content: string) => {
+  const handleCopy = (content: string): void => {
     navigator.clipboard.writeText(content);
     addToast('Prompt copiado para a área de transferência!');
   };
 
-  const handleOpenPlayground = (prompt: Prompt) => {
+  const handleOpenPlayground = (prompt: Prompt): void => {
     setSelectedPrompt(prompt);
     setPlaygroundOpen(true);
   };
@@ -132,12 +132,12 @@ function App() {
             <div className="absolute -inset-1 bg-gradient-to-r from-accent to-gold rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
             <div className="relative flex items-center bg-white rounded-xl shadow-2xl p-2">
               <Search className="w-6 h-6 text-legal-400 ml-3" />
-              <input 
+              <input
                 type="text"
                 placeholder="Busque por 'Discursiva', 'Cronograma', 'Direito Constitucional'..."
                 className="w-full px-4 py-3 text-legal-900 placeholder-legal-400 bg-transparent border-none focus:ring-0 text-lg outline-none"
                 value={filter.search}
-                onChange={(e) => setFilter(prev => ({ ...prev, search: e.target.value }))}
+                onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(prev => ({ ...prev, search: e.target.value }))}
               />
               <button className="hidden sm:block bg-legal-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent transition-colors">
                 Buscar

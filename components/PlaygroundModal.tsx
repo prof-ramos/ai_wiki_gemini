@@ -7,7 +7,7 @@ interface PlaygroundModalProps {
   isOpen: boolean;
   onClose: () => void;
   prompt: Prompt | null;
-  addToast: (msg: string, type: 'success' | 'error') => void;
+  addToast: (msg: string, type?: 'success' | 'error' | 'info') => void;
 }
 
 const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prompt, addToast }) => {
@@ -23,13 +23,13 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
       setInputContent(prompt.content);
       setResult('');
       // Check if API key is roughly available (mock check)
-      setHasApiKey(!!process.env.API_KEY);
+      setHasApiKey(typeof process.env.API_KEY === 'string' && process.env.API_KEY.length > 0);
     }
   }, [isOpen, prompt]);
 
   if (!isOpen || !prompt) return null;
 
-  const handleGenerate = async () => {
+  const handleGenerate = async (): Promise<void> => {
     if (!inputContent.trim()) return;
 
     setIsLoading(true);
@@ -38,14 +38,15 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
       const fullContext = `Tarefa: ${prompt.title}. \n\n${inputContent}`;
       const response = await generateCompletion('gemini-3-flash-preview', fullContext);
       setResult(response);
-    } catch (error) {
-      addToast('Erro ao gerar resposta. Verifique a configuração da API.', 'error');
+    } catch (error: unknown) {
+      const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
+      addToast(`Erro ao gerar resposta: ${errorMessage}. Verifique a configuração da API.`, 'error');
     } finally {
       setIsLoading(false);
     }
   };
 
-  const copyResult = () => {
+  const copyResult = (): void => {
     navigator.clipboard.writeText(result);
     addToast('Resultado copiado!', 'success');
   };
@@ -86,7 +87,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
               </label>
               <textarea
                 value={inputContent}
-                onChange={(e) => setInputContent(e.target.value)}
+                onChange={(e: React.ChangeEvent<HTMLTextAreaElement>) => setInputContent(e.target.value)}
                 className="w-full h-80 p-4 rounded-lg border border-legal-200 focus:ring-2 focus:ring-accent focus:border-transparent font-mono text-sm resize-none bg-legal-50"
                 placeholder="Edite o prompt aqui..."
               />
