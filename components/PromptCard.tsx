@@ -41,11 +41,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Header Image / Icon Area */}
-      <div className={`${isList ? 'px-4 pt-4' : 'px-6 pt-6'} flex justify-between items-start`}>
-        <div className={`p-3 rounded-lg ${prompt.category === Category.EXAM_PREP ? 'bg-purple-100 text-purple-700' : 'bg-legal-100 text-legal-700'}`}>
-          {CATEGORY_ICONS[prompt.category]}
-        </div>
-        
+      <div className={`${isList ? 'px-4 pt-3 pb-0 flex-row-reverse justify-end gap-3' : 'px-6 pt-6 justify-between'} flex items-start`}>
         <div className="flex gap-2">
            <button 
             onClick={() => setIsSaved(!isSaved)}
@@ -55,32 +51,42 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
             <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
           </button>
         </div>
+
+        <div className={`p-2 rounded-lg ${prompt.category === Category.EXAM_PREP ? 'bg-purple-100 text-purple-700' : 'bg-legal-100 text-legal-700'}`}>
+          {CATEGORY_ICONS[prompt.category]}
+        </div>
       </div>
 
       {/* Content */}
-      <div className={`${isList ? 'px-4 py-3' : 'px-6 py-4'} flex-1`}>
+      <div className={`${isList ? 'px-4 py-2' : 'px-6 py-4'} flex-1`}>
         <div className="flex items-center gap-2 mb-2">
           {prompt.isNew && (
-            <span className="px-2 py-0.5 text-xs font-bold text-white bg-accent rounded-full">
-              NOVO
+            <span className="px-2 py-0.5 text-[10px] font-bold text-white bg-accent rounded-full uppercase tracking-wider">
+              Novo
             </span>
           )}
-          <span className={`px-2 py-0.5 text-xs font-medium rounded-full ${getComplexityColor(prompt.complexity)}`}>
+          <span className={`px-2 py-0.5 text-[10px] font-medium rounded-full uppercase tracking-wide ${getComplexityColor(prompt.complexity)}`}>
             {prompt.complexity}
           </span>
         </div>
         
-        <h3 className={`font-serif font-bold text-legal-900 mb-2 leading-tight group-hover:text-accent transition-colors ${isList ? 'text-base sm:text-lg' : 'text-lg'}`}>
+        {/* Title: Adjusted leading for better mobile readability in list mode */}
+        <h3 className={`font-serif font-bold text-legal-900 mb-2 group-hover:text-accent transition-colors ${
+          isList ? 'text-base leading-snug' : 'text-lg leading-tight'
+        }`}>
           {prompt.title}
         </h3>
         
-        <p className={`text-legal-700 text-sm mb-4 ${isList ? '' : 'line-clamp-3'}`}>
+        {/* Description: Increased spacing and line-height for list view */}
+        <p className={`text-legal-700 text-sm ${
+          isList ? 'line-clamp-none leading-relaxed mb-4' : 'line-clamp-3 mb-3'
+        }`}>
           {prompt.description}
         </p>
 
-        <div className="flex flex-wrap gap-2 mt-auto">
+        <div className={`flex flex-wrap gap-1.5 ${isList ? 'mt-2' : 'mt-auto'}`}>
           {prompt.tags.map(tag => (
-            <span key={tag} className="text-xs text-legal-500 bg-legal-50 px-2 py-1 rounded border border-legal-100">
+            <span key={tag} className="text-xs text-legal-500 bg-legal-50 px-2 py-0.5 rounded border border-legal-100">
               #{tag}
             </span>
           ))}
@@ -88,23 +94,24 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       </div>
 
       {/* Footer / Actions */}
-      <div className={`${isList ? 'px-4 pb-4 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
+      <div className={`${isList ? 'px-4 pb-3 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
         <button
           onClick={() => onOpenPlayground(prompt)}
           className="text-sm font-medium text-legal-500 hover:text-accent flex items-center gap-1 transition-colors"
         >
           <ExternalLink className="w-4 h-4" />
-          Testar IA
+          Testar
         </button>
 
         <button
           onClick={handleCopy}
-          className={`flex items-center gap-2 px-4 py-2 rounded-lg text-sm font-medium transition-all duration-200 ${
+          disabled={isCopied}
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
             isCopied 
               ? 'bg-green-600 text-white' 
               : 'bg-legal-900 text-white hover:bg-accent'
           }`}
-          aria-label="Copiar prompt"
+          aria-label={isCopied ? "Copiado com sucesso" : "Copiar prompt"}
         >
           {isCopied ? (
             <>
@@ -114,7 +121,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
           ) : (
             <>
               <Copy className="w-4 h-4" />
-              <span>Copiar</span>
+              <span className={isList ? 'hidden sm:inline' : ''}>Copiar</span>
             </>
           )}
         </button>

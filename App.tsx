@@ -202,7 +202,7 @@ function App() {
 
         {/* Grid/List Display */}
         {filteredPrompts.length > 0 ? (
-          <div className={`grid gap-6 ${
+          <div className={`grid ${filter.viewMode === 'list' ? 'gap-4' : 'gap-6'} ${
             filter.viewMode === 'grid' 
               ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
               : 'grid-cols-1 max-w-4xl mx-auto'
