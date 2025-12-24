@@ -41,7 +41,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Header Image / Icon Area */}
-      <div className={`${isList ? 'px-4 pt-3 pb-0 flex-row-reverse justify-end gap-3' : 'px-6 pt-6 justify-between'} flex items-start`}>
+      <div className={`${isList ? 'px-5 pt-5 pb-0 flex-row-reverse justify-end gap-3' : 'px-6 pt-6 justify-between'} flex items-start`}>
         <div className="flex gap-2">
            <button 
             onClick={() => setIsSaved(!isSaved)}
@@ -58,8 +58,8 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       </div>
 
       {/* Content */}
-      <div className={`${isList ? 'px-4 py-2' : 'px-6 py-4'} flex-1`}>
-        <div className="flex items-center gap-2 mb-2">
+      <div className={`${isList ? 'px-5 py-4' : 'px-6 py-4'} flex-1`}>
+        <div className="flex items-center gap-2 mb-3">
           {prompt.isNew && (
             <span className="px-2 py-0.5 text-[10px] font-bold text-white bg-accent rounded-full uppercase tracking-wider">
               Novo
@@ -71,22 +71,22 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
         </div>
         
         {/* Title: Adjusted leading for better mobile readability in list mode */}
-        <h3 className={`font-serif font-bold text-legal-900 mb-2 group-hover:text-accent transition-colors ${
-          isList ? 'text-base leading-snug' : 'text-lg leading-tight'
+        <h3 className={`font-serif font-bold text-legal-900 group-hover:text-accent transition-colors ${
+          isList ? 'text-lg leading-relaxed mb-3' : 'text-lg leading-tight mb-2'
         }`}>
           {prompt.title}
         </h3>
         
         {/* Description: Increased spacing and line-height for list view */}
         <p className={`text-legal-700 text-sm ${
-          isList ? 'line-clamp-none leading-relaxed mb-4' : 'line-clamp-3 mb-3'
+          isList ? 'line-clamp-none leading-loose mb-5' : 'line-clamp-3 mb-3'
         }`}>
           {prompt.description}
         </p>
 
-        <div className={`flex flex-wrap gap-1.5 ${isList ? 'mt-2' : 'mt-auto'}`}>
+        <div className={`flex flex-wrap gap-2 ${isList ? 'mt-4' : 'mt-auto'}`}>
           {prompt.tags.map(tag => (
-            <span key={tag} className="text-xs text-legal-500 bg-legal-50 px-2 py-0.5 rounded border border-legal-100">
+            <span key={tag} className="text-xs text-legal-500 bg-legal-50 px-2.5 py-1 rounded border border-legal-100">
               #{tag}
             </span>
           ))}
@@ -94,21 +94,32 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       </div>
 
       {/* Footer / Actions */}
-      <div className={`${isList ? 'px-4 pb-3 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
-        <button
-          onClick={() => onOpenPlayground(prompt)}
-          className="text-sm font-medium text-legal-500 hover:text-accent flex items-center gap-1 transition-colors"
-        >
-          <ExternalLink className="w-4 h-4" />
-          Testar
-        </button>
+      <div className={`${isList ? 'px-5 pb-4 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
+        
+        {/* Test Button with Tooltip */}
+        <div className="relative group/tooltip">
+          <button
+            onClick={() => onOpenPlayground(prompt)}
+            className="text-sm font-medium text-legal-500 hover:text-accent flex items-center gap-1 transition-colors"
+          >
+            <ExternalLink className="w-4 h-4" />
+            Testar
+          </button>
+          
+          {/* Tooltip Element */}
+          <div className="absolute bottom-full left-0 mb-2 w-max max-w-[200px] px-3 py-2 bg-legal-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover/tooltip:opacity-100 transition-all duration-200 pointer-events-none z-20 transform translate-y-2 group-hover/tooltip:translate-y-0 text-center sm:text-left leading-snug">
+            Abra o prompt no Playground para testar e personalizar
+            {/* Arrow */}
+            <div className="absolute top-full left-4 -translate-x-1/2 border-4 border-transparent border-t-legal-900"></div>
+          </div>
+        </div>
 
         <button
           onClick={handleCopy}
           disabled={isCopied}
-          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 ${
+          className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 transform ${
             isCopied 
-              ? 'bg-green-600 text-white' 
+              ? 'bg-green-600 text-white shadow-md scale-105 ring-2 ring-green-200 ring-offset-1' 
               : 'bg-legal-900 text-white hover:bg-accent'
           }`}
           aria-label={isCopied ? "Copiado com sucesso" : "Copiar prompt"}
