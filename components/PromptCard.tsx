@@ -34,17 +34,25 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
 
   return (
     <article
-      className={`group relative bg-white rounded-xl border border-legal-100 shadow-sm hover:shadow-xl hover:-translate-y-1 transition-all duration-300 flex flex-col ${
-        isList ? 'h-auto' : 'h-full'
-      }`}
+      className={`group relative bg-white rounded-xl border border-legal-100 flex flex-col 
+      ${isList ? 'h-auto mb-6' : 'h-full'}
+      /* Animation & Visual States */
+      shadow-sm hover:shadow-lg hover:border-accent
+      transition-all duration-300 ease-in-out transform-gpu
+      motion-safe:hover:scale-105 hover:z-10
+      active:scale-[0.98]
+      `}
       onMouseEnter={() => setIsHovered(true)}
       onMouseLeave={() => setIsHovered(false)}
     >
       {/* Header Image / Icon Area */}
-      <div className={`${isList ? 'px-5 pt-5 pb-0 flex-row-reverse justify-end gap-3' : 'px-6 pt-6 justify-between'} flex items-start`}>
+      <div className={`${isList ? 'px-6 pt-6 pb-0 flex-row-reverse justify-end gap-4' : 'px-6 pt-6 justify-between'} flex items-start`}>
         <div className="flex gap-2">
            <button 
-            onClick={() => setIsSaved(!isSaved)}
+            onClick={(e) => {
+              e.stopPropagation();
+              setIsSaved(!isSaved);
+            }}
             className={`p-2 rounded-full transition-colors ${isSaved ? 'text-accent bg-accent-light' : 'text-legal-300 hover:bg-legal-50'}`}
             aria-label={isSaved ? "Remover dos favoritos" : "Salvar nos favoritos"}
           >
@@ -58,8 +66,8 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       </div>
 
       {/* Content */}
-      <div className={`${isList ? 'px-5 py-4' : 'px-6 py-4'} flex-1`}>
-        <div className="flex items-center gap-2 mb-3">
+      <div className={`${isList ? 'px-6 py-5' : 'px-6 py-4'} flex-1`}>
+        <div className="flex items-center gap-2 mb-4">
           {prompt.isNew && (
             <span className="px-2 py-0.5 text-[10px] font-bold text-white bg-accent rounded-full uppercase tracking-wider">
               Novo
@@ -70,16 +78,16 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
           </span>
         </div>
         
-        {/* Title: Adjusted leading for better mobile readability in list mode */}
+        {/* Title: Adjusted typography for list mode */}
         <h3 className={`font-serif font-bold text-legal-900 group-hover:text-accent transition-colors ${
-          isList ? 'text-lg leading-relaxed mb-3' : 'text-lg leading-tight mb-2'
+          isList ? 'text-xl md:text-2xl leading-snug mb-3' : 'text-lg leading-tight mb-2'
         }`}>
           {prompt.title}
         </h3>
         
-        {/* Description: Increased spacing and line-height for list view */}
-        <p className={`text-legal-700 text-sm ${
-          isList ? 'line-clamp-none leading-loose mb-5' : 'line-clamp-3 mb-3'
+        {/* Description: Increased font size and line-height for list mode */}
+        <p className={`text-legal-700 ${
+          isList ? 'text-base leading-relaxed mb-5' : 'text-sm line-clamp-3 mb-3'
         }`}>
           {prompt.description}
         </p>
@@ -94,7 +102,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       </div>
 
       {/* Footer / Actions */}
-      <div className={`${isList ? 'px-5 pb-4 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
+      <div className={`${isList ? 'px-6 pb-6 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
         
         {/* Test Button with Tooltip */}
         <div className="relative group/tooltip">
@@ -115,7 +123,10 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
         </div>
 
         <button
-          onClick={handleCopy}
+          onClick={(e) => {
+            e.stopPropagation(); // Prevent card click if we ever make the whole card clickable
+            handleCopy();
+          }}
           disabled={isCopied}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 transform ${
             isCopied 
