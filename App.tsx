@@ -1,10 +1,12 @@
 import React, { useState, useMemo } from 'react';
-import { Search, LayoutGrid, List as ListIcon, Menu, X, Github, Linkedin, Mail, Sparkles } from 'lucide-react';
+import { Search, LayoutGrid, List as ListIcon, Menu, X, Github, Linkedin, Mail, Sparkles, TestTube2 } from 'lucide-react';
 import { PROMPTS, CATEGORY_ICONS } from './constants';
-import { Category, FilterState, Prompt, ToastMessage } from './types';
+import { Category, FilterState, Prompt, ToastMessage, ToastType } from './types';
 import PromptCard from './components/PromptCard';
 import Toast from './components/Toast';
 import PlaygroundModal from './components/PlaygroundModal';
+import CardTest from './components/CardTest';
+import Logo from './components/Logo';
 
 function App() {
   // State
@@ -17,6 +19,7 @@ function App() {
   const [toasts, setToasts] = useState<ToastMessage[]>([]);
   const [playgroundOpen, setPlaygroundOpen] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
+  const [showCardTest, setShowCardTest] = useState(false);
 
   // Toast Handler
   const addToast = (message: string, type: ToastType = 'success'): void => {
@@ -55,39 +58,66 @@ function App() {
     setPlaygroundOpen(true);
   };
 
+  // Renderizar página de testes se ativado
+  if (showCardTest) {
+    return (
+      <div className="min-h-screen flex flex-col font-sans text-legal-900 bg-legal-50">
+        {/* Header simplificado */}
+        <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-legal-200">
+          <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+            <div className="flex justify-between items-center h-16">
+              <Logo />
+              <button
+                onClick={() => setShowCardTest(false)}
+                className="flex items-center gap-2 px-4 py-2 rounded-lg bg-legal-900 text-white hover:bg-legal-800 transition-colors"
+              >
+                <X className="w-4 h-4" />
+                Voltar
+              </button>
+            </div>
+          </div>
+        </header>
+
+        <CardTest />
+
+        <Toast toasts={toasts} removeToast={removeToast} />
+      </div>
+    );
+  }
+
   return (
     <div className="min-h-screen flex flex-col font-sans text-legal-900 bg-legal-50">
-      
+
       {/* --- HEADER --- */}
       <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-legal-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            
+
             {/* Logo */}
-            <div className="flex items-center gap-2">
-              <div className="w-8 h-8 bg-legal-900 rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl">
-                AI
-              </div>
-              <span className="font-serif text-xl font-bold tracking-tight">
-                ai<span className="text-accent">.wiki</span>.br
-              </span>
-            </div>
+            <Logo />
 
             {/* Desktop Nav */}
             <nav className="hidden md:flex items-center gap-8 text-sm font-medium text-legal-600">
-              <a href="#" className="hover:text-accent transition-colors">Home</a>
               <a href="#library" className="text-legal-900">Biblioteca</a>
               <a href="#about" className="hover:text-accent transition-colors">Sobre</a>
+              <button
+                onClick={() => setShowCardTest(true)}
+                className="flex items-center gap-2 px-4 py-2 rounded-full bg-green-100 hover:bg-green-200 transition-colors text-green-800 font-semibold"
+              >
+                <TestTube2 className="w-4 h-4" />
+                Card Tests
+              </button>
               <a href="https://aistudio.google.com/" target="_blank" rel="noreferrer" className="px-4 py-2 rounded-full bg-legal-100 hover:bg-legal-200 transition-colors">
                 API Docs
               </a>
             </nav>
 
             {/* Mobile Menu Button */}
-            <button 
+            <button
               className="md:hidden p-2 text-legal-600"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Menu"
+              aria-expanded={mobileMenuOpen}
             >
               {mobileMenuOpen ? <X /> : <Menu />}
             </button>
@@ -97,9 +127,15 @@ function App() {
         {/* Mobile Menu Dropdown */}
         {mobileMenuOpen && (
           <div className="md:hidden border-t border-legal-100 bg-white px-4 py-4 space-y-4">
-            <a href="#" className="block py-2 font-medium">Home</a>
             <a href="#library" className="block py-2 font-medium">Biblioteca</a>
             <a href="#about" className="block py-2 font-medium">Sobre</a>
+            <button
+              onClick={() => { setShowCardTest(true); setMobileMenuOpen(false); }}
+              className="flex items-center gap-2 py-2 font-medium text-green-800 w-full"
+            >
+              <TestTube2 className="w-4 h-4" />
+              Card Tests
+            </button>
           </div>
         )}
       </header>
@@ -138,6 +174,7 @@ function App() {
                 className="w-full px-4 py-3 text-legal-900 placeholder-legal-400 bg-transparent border-none focus:ring-0 text-lg outline-none"
                 value={filter.search}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(prev => ({ ...prev, search: e.target.value }))}
+                aria-label="Buscar prompts"
               />
               <button className="hidden sm:block bg-legal-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent transition-colors">
                 Buscar
@@ -175,14 +212,14 @@ function App() {
           <div className="flex bg-white border border-legal-200 rounded-lg p-1 ml-auto md:ml-0 mt-4 md:mt-0">
             <button
               onClick={() => setFilter(prev => ({ ...prev, viewMode: 'grid' }))}
-              className={`p-2 rounded ${filter.viewMode === 'grid' ? 'bg-legal-100 text-legal-900' : 'text-legal-400 hover:text-legal-600'}`}
+              className={`p-3 rounded ${filter.viewMode === 'grid' ? 'bg-legal-100 text-legal-900' : 'text-legal-400 hover:text-legal-600'}`}
               aria-label="Visualização em Grade"
             >
               <LayoutGrid className="w-5 h-5" />
             </button>
             <button
               onClick={() => setFilter(prev => ({ ...prev, viewMode: 'list' }))}
-              className={`p-2 rounded ${filter.viewMode === 'list' ? 'bg-legal-100 text-legal-900' : 'text-legal-400 hover:text-legal-600'}`}
+              className={`p-3 rounded ${filter.viewMode === 'list' ? 'bg-legal-100 text-legal-900' : 'text-legal-400 hover:text-legal-600'}`}
               aria-label="Visualização em Lista"
             >
               <ListIcon className="w-5 h-5" />
@@ -262,13 +299,13 @@ function App() {
             <div>
               <h4 className="font-bold text-legal-900 mb-4">Contato</h4>
               <div className="flex gap-4">
-                <a href="#" className="p-2 bg-legal-100 rounded-full hover:bg-legal-200 transition-colors text-legal-700">
+                <a href="#" className="p-3 bg-legal-100 rounded-full hover:bg-legal-200 transition-colors text-legal-700" aria-label="GitHub">
                   <Github className="w-5 h-5" />
                 </a>
-                <a href="#" className="p-2 bg-legal-100 rounded-full hover:bg-legal-200 transition-colors text-legal-700">
+                <a href="#" className="p-3 bg-legal-100 rounded-full hover:bg-legal-200 transition-colors text-legal-700" aria-label="LinkedIn">
                   <Linkedin className="w-5 h-5" />
                 </a>
-                <a href="#" className="p-2 bg-legal-100 rounded-full hover:bg-legal-200 transition-colors text-legal-700">
+                <a href="#" className="p-3 bg-legal-100 rounded-full hover:bg-legal-200 transition-colors text-legal-700" aria-label="Email">
                   <Mail className="w-5 h-5" />
                 </a>
               </div>

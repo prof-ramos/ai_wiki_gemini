@@ -1,5 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, ExternalLink, Bookmark } from 'lucide-react';
+import GeminiIcon from './icons/GeminiIcon';
+import ChatGPTIcon from './icons/ChatGPTIcon';
 import { Prompt, Category } from '../types';
 import { CATEGORY_ICONS } from '../constants';
 
@@ -21,6 +23,27 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
     onCopy(prompt.content);
     setIsCopied(true);
     setTimeout(() => setIsCopied(false), 2000);
+  };
+
+  const handleChatGPTTest = async (e: React.MouseEvent): Promise<void> => {
+    e.stopPropagation();
+
+    try {
+      await navigator.clipboard.writeText(prompt.content);
+      onCopy(prompt.content);
+    } catch (error) {
+      console.error('Erro ao copiar prompt:', error);
+      onCopy(prompt.content);
+    }
+
+    const encodedPrompt = encodeURIComponent(prompt.content);
+    const chatGPTUrl = `https://chatgpt.com/?q=${encodedPrompt}`;
+    const newWindow = window.open(chatGPTUrl, '_blank', 'noopener,noreferrer');
+
+    if (!newWindow) {
+      console.warn('Popup blocker detected');
+      alert('Popup bloqueado! Por favor, permita popups para este site ou clique novamente.');
+    }
   };
 
   const getComplexityColor = (level: Prompt['complexity']): string => {
@@ -48,12 +71,12 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       {/* Header Image / Icon Area */}
       <div className={`${isList ? 'px-6 pt-6 pb-0 flex-row-reverse justify-end gap-4' : 'px-6 pt-6 justify-between'} flex items-start`}>
         <div className="flex gap-2">
-           <button 
+           <button
             onClick={(e) => {
               e.stopPropagation();
               setIsSaved(!isSaved);
             }}
-            className={`p-2 rounded-full transition-colors ${isSaved ? 'text-accent bg-accent-light' : 'text-legal-300 hover:bg-legal-50'}`}
+            className={`p-3 rounded-full transition-colors ${isSaved ? 'text-accent bg-accent-light' : 'text-legal-300 hover:bg-legal-50'}`}
             aria-label={isSaved ? "Remover dos favoritos" : "Salvar nos favoritos"}
           >
             <Bookmark className={`w-5 h-5 ${isSaved ? 'fill-current' : ''}`} />
@@ -104,21 +127,47 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       {/* Footer / Actions */}
       <div className={`${isList ? 'px-6 pb-6 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
         
-        {/* Test Button with Tooltip */}
-        <div className="relative group/tooltip">
-          <button
-            onClick={() => onOpenPlayground(prompt)}
-            className="text-sm font-medium text-legal-500 hover:text-accent flex items-center gap-1 transition-colors"
-          >
-            <ExternalLink className="w-4 h-4" />
+        {/* Test Actions with Multi-Model Options */}
+        <div className="flex items-center gap-2">
+          <span className="text-xs font-semibold text-legal-400 uppercase tracking-wider">
             Testar
-          </button>
-          
-          {/* Tooltip Element */}
-          <div className="absolute bottom-full left-0 mb-2 w-max max-w-[200px] px-3 py-2 bg-legal-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover/tooltip:opacity-100 transition-all duration-200 pointer-events-none z-20 transform translate-y-2 group-hover/tooltip:translate-y-0 text-center sm:text-left leading-snug">
-            Abra o prompt no Playground para testar e personalizar
-            {/* Arrow */}
-            <div className="absolute top-full left-4 -translate-x-1/2 border-4 border-transparent border-t-legal-900"></div>
+          </span>
+
+          {/* Botão Gemini (in-app) */}
+          <div className="relative group/gemini">
+            <button
+              onClick={(e) => {
+                e.stopPropagation();
+                onOpenPlayground(prompt);
+              }}
+              className="p-3 rounded-lg bg-legal-100 hover:bg-blue-50 transition-all duration-200 active:scale-95"
+              aria-label="Testar no Gemini"
+            >
+              <GeminiIcon className="w-4 h-4 text-legal-600 group-hover/gemini:text-blue-600" />
+            </button>
+
+            {/* Tooltip Gemini */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-legal-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover/gemini:opacity-100 transition-all duration-200 pointer-events-none z-20 whitespace-nowrap">
+              Testar no Gemini (in-app)
+              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-legal-900"></div>
+            </div>
+          </div>
+
+          {/* Botão ChatGPT (external) */}
+          <div className="relative group/chatgpt">
+            <button
+              onClick={handleChatGPTTest}
+              className="p-3 rounded-lg bg-legal-100 hover:bg-emerald-50 transition-all duration-200 active:scale-95"
+              aria-label="Testar no ChatGPT"
+            >
+              <ChatGPTIcon className="w-4 h-4 text-legal-600 group-hover/chatgpt:text-emerald-600" />
+            </button>
+
+            {/* Tooltip ChatGPT */}
+            <div className="absolute bottom-full left-1/2 -translate-x-1/2 mb-2 px-3 py-2 bg-legal-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover/chatgpt:opacity-100 transition-all duration-200 pointer-events-none z-20 whitespace-nowrap">
+              Testar no ChatGPT (nova aba)
+              <div className="absolute top-full left-1/2 -translate-x-1/2 border-4 border-transparent border-t-legal-900"></div>
+            </div>
           </div>
         </div>
 

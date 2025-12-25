@@ -68,9 +68,10 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
             </h2>
             <p className="text-sm text-legal-700">Testando: {prompt.title}</p>
           </div>
-          <button 
+          <button
             onClick={onClose}
-            className="p-2 text-legal-500 hover:text-legal-900 hover:bg-legal-100 rounded-full transition-colors"
+            className="p-3 text-legal-500 hover:text-legal-900 hover:bg-legal-100 rounded-full transition-colors"
+            aria-label="Fechar playground"
           >
             <X className="w-6 h-6" />
           </button>
@@ -121,9 +122,10 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
                 Resultado da IA
               </label>
               {result && (
-                <button 
+                <button
                   onClick={copyResult}
-                  className="text-xs flex items-center gap-1 text-accent hover:underline"
+                  className="p-3 text-xs flex items-center gap-1 text-accent hover:bg-accent-light rounded-lg transition-colors"
+                  aria-label="Copiar resultado"
                 >
                   <Copy className="w-3 h-3" /> Copiar
                 </button>

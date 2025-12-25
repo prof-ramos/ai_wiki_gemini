@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(ls -la)",
+      "Bash(npx tsc --project ./tsconfig.json)",
+      "Bash(npm run build)",
+      "Bash(npm install)",
+      "Bash(lsof -i :3000)",
+      "Bash(npm run dev)",
+      "Bash(tree -L 2 -I node_modules)"
+    ]
+  }
+}
