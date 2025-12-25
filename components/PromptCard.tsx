@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, memo } from 'react';
 import { Copy, Check, ExternalLink, Bookmark } from 'lucide-react';
 import GeminiIcon from './icons/GeminiIcon';
 import ChatGPTIcon from './icons/ChatGPTIcon';
@@ -12,7 +12,7 @@ interface PromptCardProps {
   viewMode?: 'grid' | 'list';
 }
 
-const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlayground, viewMode = 'grid' }) => {
+const PromptCard: React.FC<PromptCardProps> = memo(({ prompt, onCopy, onOpenPlayground, viewMode = 'grid' }) => {
   const [isCopied, setIsCopied] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
@@ -199,6 +199,6 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       </div>
     </article>
   );
-};
+});
 
 export default PromptCard;

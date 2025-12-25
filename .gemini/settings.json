@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "agentskb": {
+      "url": "https://mcp.agentskb.com/mcp-kb",
+      "type": "sse"
+    }
+  }
+}

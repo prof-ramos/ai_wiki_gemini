@@ -7,6 +7,7 @@ import Toast from './components/Toast';
 import PlaygroundModal from './components/PlaygroundModal';
 import CardTest from './components/CardTest';
 import Logo from './components/Logo';
+import { useDebounce } from './hooks/useDebounce';
 
 function App() {
   // State
@@ -20,6 +21,9 @@ function App() {
   const [playgroundOpen, setPlaygroundOpen] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
   const [showCardTest, setShowCardTest] = useState(false);
+
+  // Debounced search term for performance
+  const debouncedSearchTerm = useDebounce(filter.search, 300);
 
   // Toast Handler
   const addToast = (message: string, type: ToastType = 'success'): void => {
@@ -35,15 +39,15 @@ function App() {
   const filteredPrompts = useMemo(() => {
     return PROMPTS.filter((prompt) => {
       const matchesSearch = 
-        prompt.title.toLowerCase().includes(filter.search.toLowerCase()) ||
-        prompt.description.toLowerCase().includes(filter.search.toLowerCase()) ||
-        prompt.tags.some(tag => tag.toLowerCase().includes(filter.search.toLowerCase()));
+        prompt.title.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        prompt.description.toLowerCase().includes(debouncedSearchTerm.toLowerCase()) ||
+        prompt.tags.some(tag => tag.toLowerCase().includes(debouncedSearchTerm.toLowerCase()));
       
       const matchesCategory = filter.category === Category.ALL || prompt.category === filter.category;
 
       return matchesSearch && matchesCategory;
     });
-  }, [filter.search, filter.category]);
+  }, [debouncedSearchTerm, filter.category]);
 
   const categories = Object.values(Category);
 

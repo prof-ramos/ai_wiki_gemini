@@ -1,0 +1,166 @@
+Starting CodeRabbit review in plain text mode...
+
+Connecting to review service
+Setting up
+Analyzing
+Reviewing
+
+============================================================================
+File: AGENTS.md
+Line: 7 to 17
+Type: nitpick
+
+Prompt for AI Agent:
+In AGENTS.md around lines 7 to 17, the style rules mention error handling and the path alias but lack concrete examples; add two short illustrative snippets: one showing a try-catch that narrows the error with "if (error instanceof Error)" and logs/handles error.message and stack, and another showing an import using the alias (e.g., import { X } from '@/path/to/module') with a note that @/* maps to the repo root; keep both examples minimal, language-marked as TypeScript, and place them directly under the respective bullets so readers can copy/paste.
+
+
+
+============================================================================
+File: AGENTS.md
+Line: 1 to 5
+Type: nitpick
+
+Prompt for AI Agent:
+In AGENTS.md around lines 1 to 5, the "No lint/test configured" note is ambiguous; update it to clearly state that there are no automated lint or test scripts and instruct developers to run linting and tests manually before committing/pushing (include example commands like npm run lint and npm test if applicable), suggest adding steps to run them and note whether CI will fail without these checks; keep the section brief and prescriptive so new contributors know exactly what manual checks to perform.
+
+
+
+============================================================================
+File: components/icons/GeminiIcon.tsx
+Line: 7 to 16
+Type: potential_issue
+
+
+
+
+============================================================================
+File: components/Logo.tsx
+Line: 5 to 12
+Type: potential_issue
+
+Prompt for AI Agent:
+In components/Logo.tsx around lines 5–12 the logo markup lacks accessibility labels; add a programmatic name and hide decorative text: give the outer container a semantic role="img" with a clear aria-label (e.g., "AI.wiki.br logo") or insert a visually-hidden text node (sr-only) that describes the logo, and mark purely decorative inner spans (like the stylized "AI" or ".wiki.br" accent) with aria-hidden="true" so screen readers only receive the descriptive label.
+
+
+
+============================================================================
+File: components/icons/GeminiIcon.tsx
+Line: 9 to 14
+Type: nitpick
+
+Prompt for AI Agent:
+In components/icons/GeminiIcon.tsx around lines 9 to 14 the SVG lacks accessibility attributes; update the SVG to either be marked decorative or descriptive: if the icon is purely decorative (paired with text) add aria-hidden="true" and role="img" (or just aria-hidden="true") so screen readers ignore it; if it conveys meaning or stands alone, add role="img" plus a descriptive aria-label prop (or aria-labelledby that references a visually hidden ) and ensure the label is passed via props so callers can supply context.
+
+
+
+============================================================================
+File: components/Toast.tsx
+Line: 54
+Type: nitpick
+
+Prompt for AI Agent:
+In components/Toast.tsx around line 54, you’re using Tailwind’s transition-colors while only changing opacity on hover; either remove transition-colors and use transition-opacity (or just transition) to match the hover:opacity-70, or keep transition-colors and add a real color change such as hover:bg-gray-100 (and adjust padding/rounded as needed); update the className accordingly so the declared transition matches the visual property being animated.
+
+
+
+============================================================================
+File: index.html
+Line: 91
+Type: potential_issue
+
+Prompt for AI Agent:
+In index.html around line 91, the page is referencing a TypeScript/TSX module directly () which browsers cannot execute; during development a dev server (e.g., Vite) transpiles this, but in production you must build and serve compiled JS. Fix by running your build to output transpiled JS (and hashed asset filenames if configured), update the HTML to reference the generated JS file (e.g., /assets/index-.js) or configure your build tool to inject the correct script into the final HTML, and ensure the deployment serves the compiled assets instead of raw .tsx files.
+
+
+
+============================================================================
+File: components/icons/ChatGPTIcon.tsx
+Line: 7 to 18
+Type: potential_issue
+
+Prompt for AI Agent:
+In components/icons/ChatGPTIcon.tsx around lines 7 to 18, the SVG lacks accessibility attributes; update the component to accept an optional title/ariaLabel prop, render a  element with a unique id when provided, add role="img" and aria-labelledby referencing that id (or aria-label when provided), and if no label/title is supplied set aria-hidden="true"; this makes the icon accessible to screen readers while keeping it decorative by default.
+
+
+
+============================================================================
+File: components/PromptCard.tsx
+Line: 43 to 45
+Type: potential_issue
+
+Prompt for AI Agent:
+In components/PromptCard.tsx around lines 43-45, the code only logs a console.warn when window.open returns null (popup blocked); instead show a user-visible notification (toast, alert, or inline message) so the user knows nothing happened. Update the handler to keep the console.warn but also call the app's toast/notification API (or fallback to window.alert) with a clear, accessible message like "Popup blocked — please allow popups or click here to open in this window", and offer a fallback action (e.g., open in same tab or provide a retry button). Ensure the notification is screen-reader friendly (aria-live) and that any fallback navigation is invoked only after explicit user acknowledgement.
+
+
+
+============================================================================
+File: components/CardTest.tsx
+Line: 15 to 16
+Type: nitpick
+
+Prompt for AI Agent:
+In components/CardTest.tsx around lines 15-16, remove the synchronous alert() call which blocks the UI and replace it with a non-blocking alternative: either console.log(Card clicked: ${cardName}) for simple debugging, or trigger your app's toast/notification system (e.g., call showToast or similar) to display a transient message; ensure the handler signature remains (cardName: string) and import/use the toast API consistently with the project conventions.
+
+
+
+============================================================================
+File: components/CardTest.tsx
+Line: 232 to 246
+Type: nitpick
+
+Prompt for AI Agent:
+In components/CardTest.tsx around lines 232–246, the mapped Card components use variant="default" while they are interactive and used to test keyboard navigation; change the prop to variant="interactive" for each Card (the three items in the map) so the UI and semantics reflect interactivity; ensure the onClick and ariaLabel remain unchanged and run the component tests/linter after the change.
+
+
+
+============================================================================
+File: components/Card.tsx
+Line: 178 to 179
+Type: potential_issue
+
+Prompt for AI Agent:
+In components/Card.tsx around lines 178-179, the active state class lacks the motion-safe: prefix used for hover effects; update the activeClasses expression so the active:scale-[0.98] is prefixed with motion-safe: (matching the hover rules on lines ~144 and ~146) so users who prefer reduced motion won't see the click scale animation.
+
+
+
+============================================================================
+File: components/Card.tsx
+Line: 229 to 237
+Type: potential_issue
+
+Prompt for AI Agent:
+In components/Card.tsx around lines 229 to 237 you declared a role prop in ClickableCardProps but didn't forward it to the  returned when onClick is present; either remove role from the interface if unused, or forward the prop to the button (add role={role}) and ensure the interface and call sites still type-check; if keeping role, also keep the existing role passed to the  consistent or document why they differ.
+
+
+
+============================================================================
+File: components/Card.tsx
+Line: 165 to 202
+Type: nitpick
+
+Prompt for AI Agent:
+In components/Card.tsx around lines 165 to 202, the card misses explicit focus styles for keyboard users when clickable; add focus-visible classes so tab navigation shows the intended focus ring. Modify the class construction to include (only when onClick is present) something like "focus-visible:ring-2 focus-visible:ring-accent focus-visible:outline-none" (or your design-system equivalents) — add these to the buttonResetClasses or as a dedicated focusClasses variable and include it in finalClasses so clickable cards get the custom focus ring while non-interactive cards are unaffected.
+
+
+
+============================================================================
+File: App.tsx
+Line: 101 to 103
+Type: potential_issue
+
+Prompt for AI Agent:
+In App.tsx around lines 101-103, the conditional button block checking showCardTest is dead code because an early return (lines 62-86) prevents this render path when showCardTest is true; remove the unused JSX for the Home button (the entire {showCardTest && (...)} block) or, if the button must appear when showCardTest is true, move its JSX into the branch that renders when showCardTest is true (e.g., before the early return or inside the alternate render block) so it is reachable.
+
+
+
+============================================================================
+File: App.tsx
+Line: 133 to 135
+Type: potential_issue
+
+Prompt for AI Agent:
+In App.tsx around lines 133-135, the mobile menu contains a conditional that checks showCardTest inside a block that itself only renders when showCardTest is false, making this Home button unreachable; remove the inner redundant condition so the button renders when the mobile menu is open, or change the condition to !showCardTest if the intent was to show the button only when showCardTest is false; update the JSX accordingly and ensure the button's onClick still closes the mobile menu and toggles showCardTest as intended.
+
+
+
+Review completed ✔
