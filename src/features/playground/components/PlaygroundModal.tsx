@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Loader2, Copy } from 'lucide-react';
-import { Prompt, ToastType } from '../types';
-import { generateCompletion } from '../services/geminiService';
+import { Prompt, ToastType } from '@shared/types';
+import { generateCompletion } from '@shared/services/gemini';
+import { GEMINI_CONFIG } from '@config/gemini.config';
 
 interface PlaygroundModalProps {
   isOpen: boolean;
@@ -22,8 +23,8 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
       // Pre-fill prompt, but let user edit placeholders
       setInputContent(prompt.content);
       setResult('');
-      // Check if API key is roughly available (mock check)
-      setHasApiKey(typeof process.env.API_KEY === 'string' && process.env.API_KEY.length > 0);
+      // Check if API key is configured
+      setHasApiKey(Boolean(GEMINI_CONFIG.apiKey && GEMINI_CONFIG.apiKey.length > 0));
     }
   }, [isOpen, prompt]);
 
@@ -36,7 +37,10 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
     try {
       // Combine title for context
       const fullContext = `Tarefa: ${prompt.title}. \n\n${inputContent}`;
-      const response = await generateCompletion('gemini-3-flash-preview', fullContext);
+      const response = await generateCompletion(fullContext, {
+        model: GEMINI_CONFIG.models.flash,
+        systemInstruction: GEMINI_CONFIG.systemInstructions.examPrep,
+      });
       setResult(response);
     } catch (error: unknown) {
       const errorMessage = error instanceof Error ? error.message : 'Erro desconhecido';
@@ -53,7 +57,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
 
   return (
     <div className="fixed inset-0 z-40 flex items-center justify-center p-4 bg-legal-900/50 backdrop-blur-sm">
-      <div 
+      <div
         className="bg-white rounded-xl shadow-2xl w-full max-w-4xl max-h-[90vh] flex flex-col overflow-hidden animate-fade-in-up"
         role="dialog"
         aria-modal="true"
@@ -68,7 +72,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
             </h2>
             <p className="text-sm text-legal-700">Testando: {prompt.title}</p>
           </div>
-          <button 
+          <button
             onClick={onClose}
             className="p-2 text-legal-500 hover:text-legal-900 hover:bg-legal-100 rounded-full transition-colors"
           >
@@ -78,7 +82,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
 
         {/* Content */}
         <div className="flex-1 overflow-auto p-6 grid grid-cols-1 md:grid-cols-2 gap-6">
-          
+
           {/* Left: Input */}
           <div className="flex flex-col gap-4">
             <div>
@@ -121,7 +125,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
                 Resultado da IA
               </label>
               {result && (
-                <button 
+                <button
                   onClick={copyResult}
                   className="text-xs flex items-center gap-1 text-accent hover:underline"
                 >
@@ -129,7 +133,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
                 </button>
               )}
             </div>
-            
+
             <div className="flex-1 relative">
               <div className="absolute inset-0 bg-legal-50 rounded-lg border border-legal-200 p-4 overflow-auto">
                  {result ? (

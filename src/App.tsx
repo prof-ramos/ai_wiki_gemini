@@ -1,10 +1,11 @@
 import React, { useState, useMemo } from 'react';
 import { Search, LayoutGrid, List as ListIcon, Menu, X, Github, Linkedin, Mail, Sparkles } from 'lucide-react';
-import { PROMPTS, CATEGORY_ICONS } from './constants';
-import { Category, FilterState, Prompt, ToastMessage } from './types';
-import PromptCard from './components/PromptCard';
-import Toast from './components/Toast';
-import PlaygroundModal from './components/PlaygroundModal';
+import { Category, FilterState, Prompt, ToastType } from '@shared/types';
+import { CATEGORY_ICONS } from '@shared/utils/constants';
+import { useToast } from '@shared/hooks';
+import { Toast } from '@shared/components/Toast';
+import { PromptCard, PROMPTS } from '@features/prompts';
+import { PlaygroundModal } from '@features/playground';
 
 function App() {
   // State
@@ -14,28 +15,18 @@ function App() {
     viewMode: 'grid',
   });
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [toasts, setToasts] = useState<ToastMessage[]>([]);
+  const { toasts, addToast, removeToast } = useToast();
   const [playgroundOpen, setPlaygroundOpen] = useState(false);
   const [selectedPrompt, setSelectedPrompt] = useState<Prompt | null>(null);
-
-  // Toast Handler
-  const addToast = (message: string, type: ToastType = 'success'): void => {
-    const id = Date.now();
-    setToasts((prev) => [...prev, { id, message, type }]);
-  };
-
-  const removeToast = (id: number): void => {
-    setToasts((prev) => prev.filter((t) => t.id !== id));
-  };
 
   // Logic: Filtering
   const filteredPrompts = useMemo(() => {
     return PROMPTS.filter((prompt) => {
-      const matchesSearch = 
+      const matchesSearch =
         prompt.title.toLowerCase().includes(filter.search.toLowerCase()) ||
         prompt.description.toLowerCase().includes(filter.search.toLowerCase()) ||
         prompt.tags.some(tag => tag.toLowerCase().includes(filter.search.toLowerCase()));
-      
+
       const matchesCategory = filter.category === Category.ALL || prompt.category === filter.category;
 
       return matchesSearch && matchesCategory;
@@ -57,12 +48,12 @@ function App() {
 
   return (
     <div className="min-h-screen flex flex-col font-sans text-legal-900 bg-legal-50">
-      
+
       {/* --- HEADER --- */}
       <header className="sticky top-0 z-30 bg-white/80 backdrop-blur-md border-b border-legal-200">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex justify-between items-center h-16">
-            
+
             {/* Logo */}
             <div className="flex items-center gap-2">
               <div className="w-8 h-8 bg-legal-900 rounded-lg flex items-center justify-center text-white font-serif font-bold text-xl">
@@ -84,7 +75,7 @@ function App() {
             </nav>
 
             {/* Mobile Menu Button */}
-            <button 
+            <button
               className="md:hidden p-2 text-legal-600"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Menu"
@@ -126,7 +117,7 @@ function App() {
           <p className="text-lg md:text-xl text-legal-300 max-w-2xl mx-auto mb-10 font-light">
             A maior biblioteca de prompts para concurseiros: crie cronogramas, corrija discursivas e gere simulados em segundos. Ferramentas essenciais também para a prática jurídica.
           </p>
-          
+
           {/* Search Bar - Hero */}
           <div className="max-w-2xl mx-auto relative group">
             <div className="absolute -inset-1 bg-gradient-to-r from-accent to-gold rounded-xl blur opacity-25 group-hover:opacity-50 transition duration-1000"></div>
@@ -149,10 +140,10 @@ function App() {
 
       {/* --- MAIN CONTENT --- */}
       <main id="library" className="flex-1 max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 w-full">
-        
+
         {/* Controls Bar */}
         <div className="flex flex-col md:flex-row justify-between items-start md:items-center gap-6 mb-10">
-          
+
           {/* Category Pills */}
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
@@ -203,14 +194,14 @@ function App() {
         {/* Grid/List Display */}
         {filteredPrompts.length > 0 ? (
           <div className={`grid ${filter.viewMode === 'list' ? 'gap-4' : 'gap-6'} ${
-            filter.viewMode === 'grid' 
-              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3' 
+            filter.viewMode === 'grid'
+              ? 'grid-cols-1 md:grid-cols-2 lg:grid-cols-3'
               : 'grid-cols-1 max-w-4xl mx-auto'
           }`}>
             {filteredPrompts.map((prompt) => (
-              <PromptCard 
-                key={prompt.id} 
-                prompt={prompt} 
+              <PromptCard
+                key={prompt.id}
+                prompt={prompt}
                 onCopy={handleCopy}
                 onOpenPlayground={handleOpenPlayground}
                 viewMode={filter.viewMode}
@@ -222,7 +213,7 @@ function App() {
             <Search className="w-12 h-12 text-legal-300 mx-auto mb-4" />
             <h3 className="text-lg font-medium text-legal-900">Nenhum prompt encontrado</h3>
             <p className="text-legal-500">Tente ajustar seus filtros ou termos de busca.</p>
-            <button 
+            <button
               onClick={() => setFilter({ search: '', category: Category.ALL, viewMode: 'grid' })}
               className="mt-4 text-accent hover:underline font-medium"
             >
@@ -248,7 +239,7 @@ function App() {
                 Projeto educacional desenvolvido pelo Prof. Gabriel Ramos. Focado em preparar candidatos para concursos públicos e equipar profissionais do direito com as melhores ferramentas de IA.
               </p>
             </div>
-            
+
             <div>
               <h4 className="font-bold text-legal-900 mb-4">Links Rápidos</h4>
               <ul className="space-y-2 text-sm text-legal-600">
@@ -277,7 +268,7 @@ function App() {
               </p>
             </div>
           </div>
-          
+
           <div className="border-t border-legal-100 pt-8 text-center text-sm text-legal-400">
             &copy; {new Date().getFullYear()} ai.wiki.br. Todos os direitos reservados.
           </div>
@@ -286,10 +277,10 @@ function App() {
 
       {/* Global Components */}
       <Toast toasts={toasts} removeToast={removeToast} />
-      
-      <PlaygroundModal 
-        isOpen={playgroundOpen} 
-        onClose={() => setPlaygroundOpen(false)} 
+
+      <PlaygroundModal
+        isOpen={playgroundOpen}
+        onClose={() => setPlaygroundOpen(false)}
         prompt={selectedPrompt}
         addToast={addToast}
       />

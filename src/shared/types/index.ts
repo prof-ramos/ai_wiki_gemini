@@ -1,3 +1,7 @@
+// ============================================
+// Global Types for ai.wiki.br
+// ============================================
+
 export enum Category {
   ALL = 'Todos',
   EXAM_PREP = 'Concursos Públicos',
@@ -30,4 +34,31 @@ export interface ToastMessage {
   id: number;
   message: string;
   type: ToastType;
+}
+
+// ============================================
+// AI/Gemini Types
+// ============================================
+
+export interface GeminiConfig {
+  apiKey: string;
+  model: string;
+  temperature?: number;
+  maxTokens?: number;
+}
+
+export interface ChatMessage {
+  role: 'user' | 'assistant' | 'system';
+  content: string;
+  timestamp: Date;
+}
+
+export interface AIResponse {
+  content: string;
+  model: string;
+  usage?: {
+    promptTokens: number;
+    completionTokens: number;
+    totalTokens: number;
+  };
 }
