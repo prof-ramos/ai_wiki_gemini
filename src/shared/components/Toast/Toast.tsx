@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { CheckCircle, XCircle, Info, X } from 'lucide-react';
-import { ToastMessage } from '../types';
+import { ToastMessage } from '@shared/types';
 
 interface ToastProps {
   toasts: ToastMessage[];
@@ -50,6 +50,7 @@ const ToastItem: React.FC<{ toast: ToastMessage; removeToast: (id: number) => vo
       {icons[toast.type]}
       <span className="text-sm font-medium">{toast.message}</span>
       <button
+        type="button"
         onClick={() => removeToast(toast.id)}
         className="ml-2 hover:opacity-70"
         aria-label="Fechar notificação"

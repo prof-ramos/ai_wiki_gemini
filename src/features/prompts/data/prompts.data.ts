@@ -1,17 +1,9 @@
-import { Category, Prompt } from './types';
-import { Scale, BookOpen, Briefcase, FileText, MessageSquare, ShieldCheck, GraduationCap } from 'lucide-react';
-import React from 'react';
+import { Category, Prompt } from '@shared/types';
 
-// Mapping categories to Icons
-export const CATEGORY_ICONS: Record<Category, React.ReactNode> = {
-  [Category.ALL]: <Scale className="w-4 h-4" />,
-  [Category.EXAM_PREP]: <GraduationCap className="w-4 h-4" />,
-  [Category.LEGAL_DRAFTING]: <FileText className="w-4 h-4" />,
-  [Category.ADMINISTRATIVE]: <Briefcase className="w-4 h-4" />,
-  [Category.CLIENT_COMMS]: <MessageSquare className="w-4 h-4" />,
-  [Category.ANALYSIS]: <ShieldCheck className="w-4 h-4" />,
-};
-
+/**
+ * Biblioteca de Prompts para Concursos Públicos e Direito
+ * Esta é a fonte centralizada de todos os prompts disponíveis na plataforma
+ */
 export const PROMPTS: Prompt[] = [
   {
     id: '101',

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Copy, Check, ExternalLink, Bookmark } from 'lucide-react';
-import { Prompt, Category } from '../types';
-import { CATEGORY_ICONS } from '../constants';
+import { Prompt, Category } from '@shared/types';
+import { CATEGORY_ICONS } from '@shared/utils/constants';
 
 interface PromptCardProps {
   prompt: Prompt;
@@ -14,7 +14,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
   const [isCopied, setIsCopied] = useState(false);
   const [isHovered, setIsHovered] = useState(false);
   const [isSaved, setIsSaved] = useState(false);
-  
+
   const isList = viewMode === 'list';
 
   const handleCopy = (): void => {
@@ -34,7 +34,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
 
   return (
     <article
-      className={`group relative bg-white rounded-xl border border-legal-100 flex flex-col 
+      className={`group relative bg-white rounded-xl border border-legal-100 flex flex-col
       ${isList ? 'h-auto mb-6' : 'h-full'}
       /* Animation & Visual States */
       shadow-sm hover:shadow-lg hover:border-accent
@@ -48,7 +48,8 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       {/* Header Image / Icon Area */}
       <div className={`${isList ? 'px-6 pt-6 pb-0 flex-row-reverse justify-end gap-4' : 'px-6 pt-6 justify-between'} flex items-start`}>
         <div className="flex gap-2">
-           <button 
+           <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               setIsSaved(!isSaved);
@@ -77,14 +78,14 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
             {prompt.complexity}
           </span>
         </div>
-        
+
         {/* Title: Adjusted typography for list mode */}
         <h3 className={`font-serif font-bold text-legal-900 group-hover:text-accent transition-colors ${
           isList ? 'text-xl md:text-2xl leading-snug mb-3' : 'text-lg leading-tight mb-2'
         }`}>
           {prompt.title}
         </h3>
-        
+
         {/* Description: Increased font size and line-height for list mode */}
         <p className={`text-legal-700 ${
           isList ? 'text-base leading-relaxed mb-5' : 'text-sm line-clamp-3 mb-3'
@@ -103,17 +104,18 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
 
       {/* Footer / Actions */}
       <div className={`${isList ? 'px-6 pb-6 pt-2' : 'px-6 pb-6 pt-2'} flex items-center justify-between border-t border-transparent group-hover:border-legal-50 mt-2`}>
-        
+
         {/* Test Button with Tooltip */}
         <div className="relative group/tooltip">
           <button
+            type="button"
             onClick={() => onOpenPlayground(prompt)}
             className="text-sm font-medium text-legal-500 hover:text-accent flex items-center gap-1 transition-colors"
           >
             <ExternalLink className="w-4 h-4" />
             Testar
           </button>
-          
+
           {/* Tooltip Element */}
           <div className="absolute bottom-full left-0 mb-2 w-max max-w-[200px] px-3 py-2 bg-legal-900 text-white text-xs rounded-lg shadow-lg opacity-0 group-hover/tooltip:opacity-100 transition-all duration-200 pointer-events-none z-20 transform translate-y-2 group-hover/tooltip:translate-y-0 text-center sm:text-left leading-snug">
             Abra o prompt no Playground para testar e personalizar
@@ -123,14 +125,15 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
         </div>
 
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation(); // Prevent card click if we ever make the whole card clickable
             handleCopy();
           }}
           disabled={isCopied}
           className={`flex items-center gap-2 px-3 py-1.5 rounded-lg text-sm font-medium transition-all duration-200 transform ${
-            isCopied 
-              ? 'bg-green-600 text-white shadow-md scale-105 ring-2 ring-green-200 ring-offset-1' 
+            isCopied
+              ? 'bg-green-600 text-white shadow-md scale-105 ring-2 ring-green-200 ring-offset-1'
               : 'bg-legal-900 text-white hover:bg-accent'
           }`}
           aria-label={isCopied ? "Copiado com sucesso" : "Copiar prompt"}
