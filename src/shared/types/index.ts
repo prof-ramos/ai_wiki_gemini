@@ -40,19 +40,12 @@ export interface ToastMessage {
 // AI/Gemini Types
 // ============================================
 
-export interface GeminiConfig {
-  apiKey: string;
-  model: string;
-  temperature?: number;
-  maxTokens?: number;
-}
-
-export interface ChatMessage {
-  role: 'user' | 'assistant' | 'system';
-  content: string;
-  timestamp: Date;
-}
-
+/**
+ * AI Response from Gemini API
+ * @property content - The generated text response
+ * @property model - The model ID that generated the response
+ * @property usage - Token usage statistics (may be undefined if not provided by the SDK)
+ */
 export interface AIResponse {
   content: string;
   model: string;

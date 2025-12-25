@@ -76,6 +76,7 @@ function App() {
 
             {/* Mobile Menu Button */}
             <button
+              type="button"
               className="md:hidden p-2 text-legal-600"
               onClick={() => setMobileMenuOpen(!mobileMenuOpen)}
               aria-label="Menu"
@@ -130,7 +131,7 @@ function App() {
                 value={filter.search}
                 onChange={(e: React.ChangeEvent<HTMLInputElement>) => setFilter(prev => ({ ...prev, search: e.target.value }))}
               />
-              <button className="hidden sm:block bg-legal-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent transition-colors">
+              <button type="button" className="hidden sm:block bg-legal-900 text-white px-6 py-2.5 rounded-lg font-medium hover:bg-accent transition-colors">
                 Buscar
               </button>
             </div>
@@ -148,6 +149,7 @@ function App() {
           <div className="flex flex-wrap gap-2">
             {categories.map((cat) => (
               <button
+                type="button"
                 key={cat}
                 onClick={() => setFilter(prev => ({ ...prev, category: cat }))}
                 className={`flex items-center gap-2 px-4 py-2 rounded-full text-sm font-medium transition-all ${
@@ -165,6 +167,7 @@ function App() {
           {/* View Toggle */}
           <div className="flex bg-white border border-legal-200 rounded-lg p-1 ml-auto md:ml-0 mt-4 md:mt-0">
             <button
+              type="button"
               onClick={() => setFilter(prev => ({ ...prev, viewMode: 'grid' }))}
               className={`p-2 rounded ${filter.viewMode === 'grid' ? 'bg-legal-100 text-legal-900' : 'text-legal-400 hover:text-legal-600'}`}
               aria-label="Visualização em Grade"
@@ -172,6 +175,7 @@ function App() {
               <LayoutGrid className="w-5 h-5" />
             </button>
             <button
+              type="button"
               onClick={() => setFilter(prev => ({ ...prev, viewMode: 'list' }))}
               className={`p-2 rounded ${filter.viewMode === 'list' ? 'bg-legal-100 text-legal-900' : 'text-legal-400 hover:text-legal-600'}`}
               aria-label="Visualização em Lista"
@@ -214,6 +218,7 @@ function App() {
             <h3 className="text-lg font-medium text-legal-900">Nenhum prompt encontrado</h3>
             <p className="text-legal-500">Tente ajustar seus filtros ou termos de busca.</p>
             <button
+              type="button"
               onClick={() => setFilter({ search: '', category: Category.ALL, viewMode: 'grid' })}
               className="mt-4 text-accent hover:underline font-medium"
             >

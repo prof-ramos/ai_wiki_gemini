@@ -21,9 +21,17 @@ Estruture sua resposta em:
 
   /**
    * Generate practice questions
+   * @param count - Maximum 20 questions to prevent excessive token consumption
    */
-  questionGeneration: (subject: string, questionType: 'múltipla escolha' | 'certo/errado', count: number) => `
-Crie ${count} questões de ${questionType} sobre ${subject}.
+  questionGeneration: (subject: string, questionType: 'múltipla escolha' | 'certo/errado', count: number) => {
+    // Validate count to prevent excessive token consumption
+    const validatedCount = Math.min(Math.max(1, count), 20);
+    if (count > 20) {
+      console.warn(`Question count ${count} exceeds maximum of 20. Using 20 instead.`);
+    }
+
+    return `
+Crie ${validatedCount} questões de ${questionType} sobre ${subject}.
 
 Para cada questão, forneça:
 - Enunciado claro
@@ -32,7 +40,8 @@ Para cada questão, forneça:
 - Fonte/fundamento legal
 
 Estilo de banca: Cebraspe/CESPE (rigor técnico)
-  `.trim(),
+    `.trim();
+  },
 
   /**
    * Review and correct essays

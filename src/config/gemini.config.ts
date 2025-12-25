@@ -5,7 +5,8 @@
 
 export const GEMINI_CONFIG = {
   // API Configuration
-  apiKey: process.env.API_KEY || '',
+  // Note: Vite requires environment variables to be prefixed with VITE_
+  apiKey: import.meta.env.VITE_GEMINI_API_KEY || '',
 
   // Model Selection
   models: {
@@ -33,8 +34,9 @@ export const GEMINI_CONFIG = {
 
 // Validation
 if (!GEMINI_CONFIG.apiKey) {
-  console.warn('⚠️  API_KEY não configurada. Funcionalidades de IA não funcionarão.');
+  console.warn('⚠️  VITE_GEMINI_API_KEY não configurada. Funcionalidades de IA não funcionarão.');
 }
 
 export type GeminiModel = typeof GEMINI_CONFIG.models[keyof typeof GEMINI_CONFIG.models];
 export type SystemInstructionContext = keyof typeof GEMINI_CONFIG.systemInstructions;
+export type GeminiConfig = typeof GEMINI_CONFIG;

@@ -29,7 +29,8 @@ export const usePrompts = (filter: FilterState) => {
 
 /**
  * Get a single prompt by ID
+ * Simple lookup in static array - no memoization needed
  */
 export const usePromptById = (id: string): Prompt | undefined => {
-  return useMemo(() => PROMPTS.find(p => p.id === id), [id]);
+  return PROMPTS.find(p => p.id === id);
 };

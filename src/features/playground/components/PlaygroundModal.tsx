@@ -73,6 +73,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
             <p className="text-sm text-legal-700">Testando: {prompt.title}</p>
           </div>
           <button
+            type="button"
             onClick={onClose}
             className="p-2 text-legal-500 hover:text-legal-900 hover:bg-legal-100 rounded-full transition-colors"
           >
@@ -97,6 +98,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
               />
             </div>
             <button
+              type="button"
               onClick={handleGenerate}
               disabled={isLoading || !inputContent.trim()}
               className="w-full py-3 bg-accent hover:bg-accent-hover disabled:bg-legal-200 disabled:cursor-not-allowed text-white rounded-lg font-medium flex items-center justify-center gap-2 transition-all shadow-md active:scale-[0.98]"
@@ -126,6 +128,7 @@ const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prom
               </label>
               {result && (
                 <button
+                  type="button"
                   onClick={copyResult}
                   className="text-xs flex items-center gap-1 text-accent hover:underline"
                 >

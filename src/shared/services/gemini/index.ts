@@ -3,6 +3,10 @@
  * Exports all Gemini-related functionality
  */
 
+// Configuration
+export { GEMINI_CONFIG } from '@config/gemini.config';
+export type { GeminiConfig, GeminiModel, SystemInstructionContext } from '@config/gemini.config';
+
 // Client
 export { generateCompletion, generateCompletionWithMetadata, isApiKeyConfigured } from './client';
 

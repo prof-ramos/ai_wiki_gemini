@@ -50,6 +50,7 @@ const ToastItem: React.FC<{ toast: ToastMessage; removeToast: (id: number) => vo
       {icons[toast.type]}
       <span className="text-sm font-medium">{toast.message}</span>
       <button
+        type="button"
         onClick={() => removeToast(toast.id)}
         className="ml-2 hover:opacity-70"
         aria-label="Fechar notificação"

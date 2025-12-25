@@ -49,6 +49,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
       <div className={`${isList ? 'px-6 pt-6 pb-0 flex-row-reverse justify-end gap-4' : 'px-6 pt-6 justify-between'} flex items-start`}>
         <div className="flex gap-2">
            <button
+            type="button"
             onClick={(e) => {
               e.stopPropagation();
               setIsSaved(!isSaved);
@@ -107,6 +108,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
         {/* Test Button with Tooltip */}
         <div className="relative group/tooltip">
           <button
+            type="button"
             onClick={() => onOpenPlayground(prompt)}
             className="text-sm font-medium text-legal-500 hover:text-accent flex items-center gap-1 transition-colors"
           >
@@ -123,6 +125,7 @@ const PromptCard: React.FC<PromptCardProps> = ({ prompt, onCopy, onOpenPlaygroun
         </div>
 
         <button
+          type="button"
           onClick={(e) => {
             e.stopPropagation(); // Prevent card click if we ever make the whole card clickable
             handleCopy();
