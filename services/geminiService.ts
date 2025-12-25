@@ -5,7 +5,7 @@ import { GoogleGenAI } from "@google/genai";
 // For this frontend demo, we assume the environment variable is injected.
 const apiKey = process.env.API_KEY;
 if (!apiKey) {
-  console.warn('GEMINI API_KEY is not set. API calls will fail.');
+  console.warn('API_KEY is not set. API calls will fail.');
 }
 const ai = new GoogleGenAI({ apiKey: apiKey || '' });
 

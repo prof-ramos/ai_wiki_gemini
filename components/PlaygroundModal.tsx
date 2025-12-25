@@ -1,13 +1,13 @@
 import React, { useState, useEffect } from 'react';
 import { X, Sparkles, Loader2, Copy } from 'lucide-react';
-import { Prompt } from '../types';
+import { Prompt, ToastType } from '../types';
 import { generateCompletion } from '../services/geminiService';
 
 interface PlaygroundModalProps {
   isOpen: boolean;
   onClose: () => void;
   prompt: Prompt | null;
-  addToast: (msg: string, type?: 'success' | 'error' | 'info') => void;
+  addToast: (msg: string, type?: ToastType) => void;
 }
 
 const PlaygroundModal: React.FC<PlaygroundModalProps> = ({ isOpen, onClose, prompt, addToast }) => {
