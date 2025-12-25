@@ -6,7 +6,7 @@ Este projeto segue uma **arquitetura baseada em features (feature-based architec
 
 ## 📁 Estrutura de Diretórios
 
-```
+```text
 ai_wiki_gemini/
 ├── src/
 │   ├── features/                    # ✨ Funcionalidades (Features)
@@ -184,7 +184,7 @@ const prompt = PromptTemplates.studyPlan('Auditor Fiscal', 4, [
 
 ## 📊 Fluxo de Dados
 
-```
+```text
 User Interaction
       ↓
   App.tsx (State Management)
@@ -246,7 +246,7 @@ mkdir -p src/features/nova-feature/{components,hooks,services}
 ```
 
 2. **Desenvolva a feature**:
-```
+```text
 src/features/nova-feature/
 ├── components/
 │   └── NovoComponente.tsx

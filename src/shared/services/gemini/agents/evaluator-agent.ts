@@ -12,12 +12,6 @@ export interface EssayEvaluationRequest {
   rubric?: string[];
 }
 
-export interface EvaluationResult {
-  scores: Record<string, number>;
-  feedback: string;
-  suggestions: string[];
-}
-
 export class EvaluatorAgent {
   /**
    * Evaluate an essay/dissertation
