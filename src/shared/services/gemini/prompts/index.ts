@@ -26,8 +26,8 @@ Estruture sua resposta em:
   questionGeneration: (subject: string, questionType: 'múltipla escolha' | 'certo/errado', count: number) => {
     // Validate count to prevent excessive token consumption
     const validatedCount = Math.min(Math.max(1, count), 20);
-    if (count > 20) {
-      console.warn(`Question count ${count} exceeds maximum of 20. Using 20 instead.`);
+    if (count > 20 || count < 1) {
+      console.warn(`Question count ${count} out of bounds [1, 20]. Using ${validatedCount} instead.`);
     }
 
     return `
